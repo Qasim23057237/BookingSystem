@@ -11,12 +11,16 @@ public class PatientForm {
     public PatientForm()
     {
     addPatientButton.addActionListener(e -> {
+        int patientID =1;
         String name = txtname.getText();
         String address = txtaddress.getText();
         String phone = txtphone.getText();
         String age = txtdob.getText();
 
-        JOptionPane.showMessageDialog(rootPanel, name + " " + address + " " + phone + " " + age);
+        //JOptionPane.showMessageDialog(rootPanel, name + " " + address + " " + phone + " " + age);
+        Patient newpatient = new Patient( patientID , name ,  address , phone , age);
+        newpatient.savedatatocsv(newpatient);
+
     });
     }
 
