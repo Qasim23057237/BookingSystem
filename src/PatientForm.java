@@ -10,27 +10,43 @@ public class PatientForm {
 
     public PatientForm()
     {
-    addPatientButton.addActionListener(e -> {
-        int patientID =1;
-        String name = txtname.getText();
-        String address = txtaddress.getText();
-        String phone = txtphone.getText();
-        String age = txtdob.getText();
+    addPatientButton.addActionListener(e ->
+    {
+        int patientID = Utility.getnextid("Patients.csv");
+        if(patientID == 0)
+        {
+            patientID = 1;
+        }
+        else
+        {
+            patientID = Utility.getnextid("Patients.csv") ;
+        }
 
-        //JOptionPane.showMessageDialog(rootPanel, name + " " + address + " " + phone + " " + age);
-        Patient newpatient = new Patient( patientID , name ,  address , phone , age);
-        newpatient.savedatatocsv(newpatient);
-
+        String name = txtname.getText().trim();
+        String address = txtaddress.getText().trim();
+        String phone = txtphone.getText().trim();
+        String age = txtdob.getText().trim();
+        if(name.isEmpty() || address.isEmpty() || phone.isEmpty() || age.isEmpty())
+        {
+            JOptionPane.showMessageDialog(rootPanel, "Please fill all the fields");
+        }
+        else {
+            //
+            Patient newpatient = new Patient(patientID, name, address, phone, age);
+            newpatient.savedatatocsv(newpatient);
+            JOptionPane.showMessageDialog(rootPanel, "Patient " + name + "Saved");
+            txtname.setText("");
+            txtaddress.setText("");
+            txtphone.setText("");
+            txtdob.setText("");
+        }
     });
     }
 
     public static void main(String[] args) {
-        // Always run GUI code on the Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Patient Form");
-            // Create an instance of your form
             PatientForm form = new PatientForm();
-            // Set the content of the JFrame to your form's rootPanel
             frame.setContentPane(form.rootPanel);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();

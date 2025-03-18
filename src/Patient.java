@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.FileWriter;
@@ -85,6 +86,48 @@ public class Patient {
 
         }
 
+        public static List<Patient> loadpatientsfromCSV()
+        {
+            List<Patient> patients = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader("Patients.csv"))) {
+                String line="";
+                while ((line = br.readLine()) != null)
+                {
+                 String[] data = line.split(",");
+                 if (data.length >= 5)
+                 {
+                  int patientId = Integer.parseInt(data[0]);
+                  String name = data[1];
+                  String DOB = data[4];
+                  String address = data[2];
+                  String phone = data[3];
+                  patients.add(new Patient(patientId, name, DOB, address, phone));
+                 }
+                }
+            } catch (IOException e) {
+                    e.printStackTrace();
+            }
+            return patients;
+        }
+        public static void removePatient(int patientId)
+        {
+            List<Patient> patient = loadpatientsfromCSV();
+            patient.removeIf(p -> p.patientId == patientId);
+      try(FileWriter fileWriter = new FileWriter("Patients.csv"))
+      {
+          for(Patient p : patient){
+              String line =  p.getPatientId() + "," + p.getName() + "," + p.getDOB() + "," + p.getAddress() + "," + p.getPhone() + "\n";
+              fileWriter.write(line);
+
+          }
+
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+
+        }
+
     }
+
 
 
